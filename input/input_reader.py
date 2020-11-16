@@ -4,6 +4,7 @@ from base.processor import Processor
 from input.images_generator import ImagesGenerator
 from input.raw_data import RawData
 from utils.debug_saver import DebugSaver
+from config import DebugLevel
 
 from sys import stdin
 from matplotlib import pyplot as plt
@@ -17,8 +18,8 @@ class InputReader(Processor):
 
     def get_raw_data(self) -> Iterable[RawData]:
         for data in ImagesGenerator(stdin):
-            if self.debug_:
+            if self.debug_level >= DebugLevel.MAIN:
                 plt.imshow(data.img)
-                self.initial_image_saver_.save()
+                self.initial_image_saver_.save(data.name)
 
             yield data

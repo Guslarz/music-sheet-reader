@@ -8,15 +8,15 @@ class DebugSaver(object):
         self.title_ = title
         self.counter_ = 0
 
-    def next_filename_(self) -> str:
+    def next_filename_(self, name: str) -> str:
         filename = f"{OUT_DIR}/{self.title_}"\
-                   f"-{self.counter_:02}.{OUT_EXT}"
+                   f"-{self.counter_:02}-{name}.{OUT_EXT}"
         self.counter_ += 1
         return filename
 
-    def save(self):
+    def save(self, name: str):
         if SAVE:
-            plt.savefig(self.next_filename_())
+            plt.savefig(self.next_filename_(name))
         else:
             plt.show()
         plt.clf()

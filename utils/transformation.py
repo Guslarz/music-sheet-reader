@@ -1,15 +1,45 @@
 from __future__ import annotations
 
-from numpy import array
+from numpy import array, sin, cos, dot
 
 
 class Transformation(object):
-    def __init__(self, offset: array, center: array,
-                 angle: float, parent: Transformation = None):
-        self.offset_ = offset
-        self.center_ = center
-        self.angle_ = angle
+    def __init__(self, parent: Transformation = None):
         self.parent_ = parent
 
     def apply_to_points(self, points: array) -> array:
+        points = self.inner_apply_to_points_(points)
+        if self.parent_:
+            points = self.parent_.apply_to_points(points)
+        return points
+
+    def inner_apply_to_points_(self, points: array) -> array:
         pass
+
+
+class Translation(Transformation):
+    def __init__(self, offset: array, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.offset_ = offset
+
+    def inner_apply_to_points_(self, points: array) -> array:
+        return points + self.offset_
+
+
+class Rotation(Transformation):
+    def __init__(self, angle: float, center: array,
+                 *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.center_ = center
+        self.rotation_matrix_ = array([
+            [cos(angle),
+             -sin(angle)],
+            [sin(angle),
+             cos(angle)]
+        ]).T
+
+    def inner_apply_to_points_(self, points: array) -> array:
+        points = points - self.center_
+        points = dot(points, self.rotation_matrix_)
+        points = points + self.center_
+        return points
