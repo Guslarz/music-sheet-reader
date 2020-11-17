@@ -3,7 +3,7 @@ from __future__ import annotations
 from base.processor import Processor
 from input.raw_data import RawData
 from utils.debug_saver import DebugSaver
-from preprocessing.sheet_data import SheetData
+from preprocessing.sheet.sheet_data import SheetData
 from utils.functions import threshold
 from utils.bbox import BBox
 from utils.transformation import Rotation, Translation
@@ -28,6 +28,7 @@ class SheetExtractor(Processor):
         self.sheet_edge_saver_ = DebugSaver('sheet_edge')
         self.sheet_corners_saver_ = DebugSaver('sheet_corners')
         self.cropped_sheet_saver_ = DebugSaver('cropped_sheet')
+        self.sheet_bbox_on_initial_saver_ = DebugSaver('sheet_bbox_on_initial')
 
     def get_sheet_data(self, raw_data: RawData) -> SheetData:
         gray = self.get_gray_(raw_data)
@@ -39,6 +40,13 @@ class SheetExtractor(Processor):
         bbox, sheet = self.get_sheet_(raw_data, rotated)
         offset = array((bbox.min_y, bbox.min_x))
         translation = Translation(offset, parent=rotation)
+
+        if self.debug_level >= DebugLevel.MAIN:
+            imshow(raw_data.img)
+            points = BBox.from_image(sheet).to_points()
+            points = translation.apply_to_points(points)
+            plot(points[:, 1], points[:, 0])
+            self.sheet_bbox_on_initial_saver_.save(raw_data.name)
 
         return SheetData(raw_data, sheet, translation)
 
@@ -139,4 +147,3 @@ class SheetExtractor(Processor):
             self.cropped_sheet_saver_.save(raw_data.name)
 
         return bbox, cropped
-

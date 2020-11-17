@@ -1,6 +1,6 @@
 from utils.debug_saver import DebugSaver
 from input.input_reader import InputReader
-from preprocessing.sheet_extractor import SheetExtractor
+from preprocessing.sheet.sheet_extractor import SheetExtractor
 from config import DebugLevel
 
 

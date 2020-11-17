@@ -16,7 +16,6 @@ class Transformation(object):
     def inner_apply_to_points_(self, points: array) -> array:
         pass
 
-
 class Translation(Transformation):
     def __init__(self, offset: array, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,12 +30,13 @@ class Rotation(Transformation):
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.center_ = center
+        angle = angle
         self.rotation_matrix_ = array([
             [cos(angle),
              -sin(angle)],
             [sin(angle),
              cos(angle)]
-        ]).T
+        ])
 
     def inner_apply_to_points_(self, points: array) -> array:
         points = points - self.center_

@@ -28,11 +28,11 @@ class BBox:
 
     def to_points(self) -> array:
         return array([
-            [self.min_y_, self.min_x_],
-            [self.min_y_, self.max_x_],
-            [self.max_y_, self.max_x_],
-            [self.max_y_, self.min_x_],
-            [self.min_y_, self.min_x_]
+            [self.min_x_, self.min_y_],
+            [self.min_x_, self.max_y_],
+            [self.max_x_, self.max_y_],
+            [self.max_x_, self.min_y_],
+            [self.min_x_, self.min_y_]
         ])
 
     @staticmethod
@@ -43,3 +43,7 @@ class BBox:
             ceil(max(contour[:, 1])),
             ceil(max(contour[:, 0]))
         )
+
+    @staticmethod
+    def from_image(image: array) -> BBox:
+        return BBox(0, 0, *image.shape)
