@@ -57,6 +57,7 @@ class LineData(object):
         self.image_data_ = image_data
         self.common_ = common_values
         self.values_ = values
+        self.objects_ = []
 
     @property
     def raw_data(self):
@@ -98,9 +99,43 @@ class LineData(object):
     def staff_lines(self):
         return self.values_.staff_lines
 
+    @property
+    def objects(self):
+        return self.objects_
+
+    def add_object(self, obj: SelectedObjectData):
+        self.objects_.append(obj)
+
     @staticmethod
     def from_other(other: LineData, image: array):
         image_data = TransformedImageData(other.raw_data,
                                           image,
                                           other.transformation)
         return LineData(image_data, other.common_values, other.values)
+
+
+class SelectedObjectData(object):
+    def __init__(self, line: LineData, img: array,
+                 line_transformation: Transformation,
+                 global_transformation: Transformation):
+        self.line_ = line
+        line.add_object(self)
+        self.img_ = img
+        self.line_transformation_ = line_transformation
+        self.global_transformation_ = global_transformation
+
+    @property
+    def line(self):
+        return self.line_
+
+    @property
+    def img(self):
+        return self.img_
+
+    @property
+    def line_transformation(self):
+        return self.line_transformation_
+
+    @property
+    def global_transformation(self):
+        return self.global_transformation_

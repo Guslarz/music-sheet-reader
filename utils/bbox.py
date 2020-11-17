@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from numpy import array, floor, ceil, min, max
+from numpy import array, floor, ceil, min as npmin, max as npmax
 
 
 class BBox:
     def __init__(self, min_x: float, min_y: float, max_x: float, max_y: float):
-        self.min_x_ = min_x
-        self.min_y_ = min_y
-        self.max_x_ = max_x
-        self.max_y_ = max_y
+        self.min_x_ = int(min_x)
+        self.min_y_ = int(min_y)
+        self.max_x_ = int(max_x)
+        self.max_y_ = int(max_y)
 
     @property
     def min_x(self) -> float:
@@ -47,12 +47,21 @@ class BBox:
     @staticmethod
     def from_contour(contour: array) -> BBox:
         return BBox(
-            int(floor(min(contour[:, 1]))),
-            int(floor(min(contour[:, 0]))),
-            int(ceil(max(contour[:, 1]))),
-            int(ceil(max(contour[:, 0])))
+            floor(npmin(contour[:, 1])),
+            floor(npmin(contour[:, 0])),
+            ceil(npmax(contour[:, 1])),
+            ceil(npmax(contour[:, 0]))
         )
 
     @staticmethod
     def from_image(image: array) -> BBox:
         return BBox(0, 0, *image.shape)
+
+    @staticmethod
+    def merge(a: BBox, b: BBox) -> BBox:
+        return BBox(
+            min(a.min_x, b.min_x),
+            min(a.min_y, b.min_y),
+            max(a.max_x, b.max_x),
+            max(a.max_y, b.max_y)
+        )
