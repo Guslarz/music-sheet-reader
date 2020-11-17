@@ -1,6 +1,6 @@
 from config import OUT_DIR, OUT_EXT, SAVE
 
-from os import listdir, path, remove
+from os import listdir, path, remove, mkdir
 from matplotlib import rc
 from matplotlib.pyplot import savefig, show, clf, \
     title as plt_title
@@ -39,6 +39,9 @@ class DebugSaver(object):
                hspace=0, top=1, bottom=0)
 
             folder = OUT_DIR
+            if not path.isdir(folder):
+                mkdir(folder)
+
             for filename in listdir(folder):
                 file_path = path.join(folder, filename)
                 try:
