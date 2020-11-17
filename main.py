@@ -8,11 +8,12 @@ from processing.line.line_binarizer import LineBinarizer
 from processing.line.line_estimator import LineEstimator
 from processing.line.staff_lines_remover import StaffLinesRemover
 from processing.objects.objects_selector import ObjectsSelector
+from processing.objects.objects_classifier import ObjectsClassifier
 from config import DebugLevel
 
 
 def main():
-    # setup plots style
+    # setup plots style and output dir
     DebugSaver.setup()
 
     # processors
@@ -25,7 +26,7 @@ def main():
     line_estimator = LineEstimator(debug_level=DebugLevel.OFF)
     staff_lines_remover = StaffLinesRemover(debug_level=DebugLevel.OFF)
     objects_selector = ObjectsSelector(debug_level=DebugLevel.OFF)
-
+    objects_classifier = ObjectsClassifier(debug_level=DebugLevel.OFF)
 
     # process data
     for raw_data in input_reader.get_raw_data():
@@ -37,7 +38,7 @@ def main():
         lines_data = line_estimator.get_lines_data(lines_data)
         lines_data = staff_lines_remover.get_lines_data(lines_data)
         objects_data = objects_selector.get_objects_data(lines_data)
-
+        musical_objects = objects_classifier.get_music_objects(lines_data)
 
 if __name__ == '__main__':
     main()

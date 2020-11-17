@@ -58,6 +58,8 @@ class LineData(object):
         self.common_ = common_values
         self.values_ = values
         self.objects_ = []
+        self.height_ = image_data.transformation\
+            .apply_to_points(array([[0, 0]]))[0][0]
 
     @property
     def raw_data(self):
@@ -103,6 +105,10 @@ class LineData(object):
     def objects(self):
         return self.objects_
 
+    @property
+    def height(self):
+        return self.height_
+
     def add_object(self, obj: SelectedObjectData):
         self.objects_.append(obj)
 
@@ -123,6 +129,8 @@ class SelectedObjectData(object):
         self.img_ = img
         self.line_transformation_ = line_transformation
         self.global_transformation_ = global_transformation
+        self.order_ = None
+        self.line_order_ = None
 
     @property
     def line(self):
@@ -139,3 +147,24 @@ class SelectedObjectData(object):
     @property
     def global_transformation(self):
         return self.global_transformation_
+
+    @property
+    def order(self):
+        return self.order_
+
+    @order.setter
+    def order(self, value):
+        self.order_ = value
+
+    @property
+    def line_order(self):
+        return self.line_order_
+
+    @order.setter
+    def line_order(self, value):
+        self.line_order_ = value
+
+    @property
+    def offset_x(self):
+        return self.line_transformation_\
+            .apply_to_points([[0, 0]])[0][1]

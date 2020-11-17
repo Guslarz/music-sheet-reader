@@ -24,6 +24,15 @@ class ObjectsSelector(Processor):
                   map(self.process_single_line_, data)
                   for obj in objects_data]
 
+        result.sort(key=lambda obj: (obj.line.height, obj.offset_x))
+        for i, obj in enumerate(result):
+            obj.order = i
+
+        for line in data:
+            line.objects.sort(key=lambda obj: obj.order)
+            for i, obj in enumerate(line.objects):
+                obj.line_order = i
+
         raw_data = data[0].raw_data
 
         if self.debug_level >= DebugLevel.MAIN:
