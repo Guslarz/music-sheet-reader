@@ -1,14 +1,28 @@
-from input.raw_data import RawData
 from utils.transformation import Transformation
 
+from skimage.io import imread
 from numpy import array
 
 
-class SheetData:
-    def __init__(self, raw_data: RawData, sheet: array,
+class RawData(object):
+    def __init__(self, path: str):
+        self.name_ = path.split('/')[-1].split('.')[-2]
+        self.img_ = imread(path, False)
+
+    @property
+    def name(self) -> str:
+        return self.name_
+
+    @property
+    def img(self) -> array:
+        return self.img_
+
+
+class TransformedImageData(object):
+    def __init__(self, raw_data: RawData, img: array,
                  transformation: Transformation):
         self.raw_data_ = raw_data
-        self.sheet_ = sheet
+        self.img_ = img
         self.transformation_ = transformation
 
     @property
@@ -24,8 +38,8 @@ class SheetData:
         return self.raw_data_.img
 
     @property
-    def sheet(self):
-        return self.sheet_
+    def img(self):
+        return self.img_
 
     @property
     def transformation(self):

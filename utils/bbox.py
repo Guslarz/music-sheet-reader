@@ -26,6 +26,10 @@ class BBox:
     def max_y(self) -> float:
         return self.max_y_
 
+    @property
+    def offset(self) -> array:
+        return array((self.min_y, self.min_x))
+
     def to_points(self) -> array:
         return array([
             [self.min_x_, self.min_y_],
@@ -35,13 +39,18 @@ class BBox:
             [self.min_x_, self.min_y_]
         ])
 
+    def crop_image(self, image: array) -> array:
+        return image[
+               self.min_y:self.max_y,
+               self.min_x:self.max_x]
+
     @staticmethod
     def from_contour(contour: array) -> BBox:
         return BBox(
-            floor(min(contour[:, 1])),
-            floor(min(contour[:, 0])),
-            ceil(max(contour[:, 1])),
-            ceil(max(contour[:, 0]))
+            int(floor(min(contour[:, 1]))),
+            int(floor(min(contour[:, 0]))),
+            int(ceil(max(contour[:, 1]))),
+            int(ceil(max(contour[:, 0])))
         )
 
     @staticmethod

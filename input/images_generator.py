@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from input.raw_data import RawData
+from utils.data import RawData
 
 from collections.abc import Iterable
 

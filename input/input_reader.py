@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from base.processor import Processor
 from input.images_generator import ImagesGenerator
-from input.raw_data import RawData
+from utils.data import RawData
 from utils.debug_saver import DebugSaver
 from config import DebugLevel
 

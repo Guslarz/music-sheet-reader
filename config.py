@@ -9,7 +9,7 @@ class DebugLevel(IntEnum):
 
 
 # CONSTANTS
-OUT_DIR = 'output'
+OUT_DIR = 'resources/output'
 OUT_EXT = 'jpg'
 
 

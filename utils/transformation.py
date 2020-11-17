@@ -43,3 +43,7 @@ class Rotation(Transformation):
         points = dot(points, self.rotation_matrix_)
         points = points + self.center_
         return points
+
+    @staticmethod
+    def center_from_img(img: array) -> array:
+        return array(img.shape) / 2
