@@ -9,6 +9,7 @@ from processing.line.line_estimator import LineEstimator
 from processing.line.staff_lines_remover import StaffLinesRemover
 from processing.objects.objects_selector import ObjectsSelector
 from processing.objects.objects_classifier import ObjectsClassifier
+from base.result import Result
 from config import DebugLevel
 
 
@@ -37,8 +38,11 @@ def main():
         lines_data = line_binarizer.get_lines_data(lines_data)
         lines_data = line_estimator.get_lines_data(lines_data)
         lines_data = staff_lines_remover.get_lines_data(lines_data)
-        objects_data = objects_selector.get_objects_data(lines_data)
+        objects_selector.get_objects_data(lines_data)
         musical_objects = objects_classifier.get_music_objects(lines_data)
+        result = Result(raw_data.name, raw_data.img, musical_objects)
+        result.show()
+
 
 if __name__ == '__main__':
     main()
