@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 from utils.transformation import Transformation
+from utils.estimated_values import CommonEstimatedValues, \
+    LineEstimatedValues
 
 from skimage.io import imread
 from numpy import array
@@ -44,3 +48,59 @@ class TransformedImageData(object):
     @property
     def transformation(self):
         return self.transformation_
+
+
+class LineData(object):
+    def __init__(self, image_data: TransformedImageData,
+                 common_values: CommonEstimatedValues,
+                 values: LineEstimatedValues):
+        self.image_data_ = image_data
+        self.common_ = common_values
+        self.values_ = values
+
+    @property
+    def raw_data(self):
+        return self.image_data_.raw_data
+
+    @property
+    def name(self):
+        return self.image_data_.name
+
+    @property
+    def initial_img(self):
+        return self.image_data_.initial_img
+
+    @property
+    def img(self):
+        return self.image_data_.img
+
+    @property
+    def transformation(self):
+        return self.image_data_.transformation
+
+    @property
+    def common_values(self):
+        return self.common_
+
+    @property
+    def line_width(self):
+        return self.common_.line_width
+
+    @property
+    def line_spacing(self):
+        return self.common_.line_spacing
+
+    @property
+    def values(self):
+        return self.values_
+
+    @property
+    def staff_lines(self):
+        return self.values_.staff_lines
+
+    @staticmethod
+    def from_other(other: LineData, image: array):
+        image_data = TransformedImageData(other.raw_data,
+                                          image,
+                                          other.transformation)
+        return LineData(image_data, other.common_values, other.values)

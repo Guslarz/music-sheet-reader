@@ -27,7 +27,7 @@ class LineRotator(Processor):
         }
 
     def get_lines_data(self, data: list[TransformedImageData]) -> list[TransformedImageData]:
-        result = [*map(self.process_single_line, data)]
+        result = [*map(self.process_single_line_, data)]
         raw_data = data[0].raw_data
 
         if self.debug_level >= DebugLevel.MAIN:
@@ -47,7 +47,7 @@ class LineRotator(Processor):
 
         return result
 
-    def process_single_line(self, data: TransformedImageData) -> TransformedImageData:
+    def process_single_line_(self, data: TransformedImageData) -> TransformedImageData:
         enhanced = self.get_enhanced_image_(data)
         angles = self.get_angles_(data, enhanced)
 
