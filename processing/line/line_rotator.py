@@ -69,6 +69,7 @@ class LineRotator(Processor):
     def get_enhanced_image_(self, data: TransformedImageData) -> array:
         image = data.img ** 2
         image = contrast(image, 0, 30)
+        image = 1 - image
         image = threshold(image, threshold_otsu(image))
 
         if self.debug_level >= DebugLevel.ALL:
@@ -85,13 +86,14 @@ class LineRotator(Processor):
                                             num_peaks=5,
                                             min_distance=2)
 
-        if self.debug_level >= DebugLevel.ALL:
+        if self.debug_level >= DebugLevel.MAIN:
             origin = array((0, img.shape[1] - 1))
+            imshow(img, cmap="gray")
             for angle, dist in zip(angles, dists):
                 y0, y1 = (dist - origin * cos(angle)) / \
                          sin(angle)
                 plot(origin, (y0, y1), 'r-')
-                self.savers_['hough-lines'].save(data.name)
+            self.savers_['hough-lines'].save(data.name)
 
         return angles
 

@@ -1,0 +1,5 @@
+resources/sheets/easy/easy-sheet1.jpg
+resources/sheets/easy/easy-sheet2.jpg
+resources/sheets/easy/easy-sheet3.jpg
+resources/sheets/easy/easy-sheet4.jpg
+resources/sheets/easy/easy-sheet5.jpg

@@ -10,6 +10,7 @@ from processing.line.staff_lines_remover import StaffLinesRemover
 from processing.objects.objects_selector import ObjectsSelector
 from processing.objects.objects_classifier import ObjectsClassifier
 from base.result import Result
+from base.musical_object import MusicalObject
 from config import DebugLevel
 
 
@@ -42,6 +43,9 @@ def main():
         musical_objects = objects_classifier.get_music_objects(lines_data)
         result = Result(raw_data.name, raw_data.img, musical_objects)
         result.show()
+
+    # show legend
+    MusicalObject.show_legend()
 
 
 if __name__ == '__main__':

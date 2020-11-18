@@ -15,6 +15,7 @@ class ObjectsSelector(Processor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.savers_ = {
+            'vertical': DebugSaver('selector_vertical_lines'),
             'lines': DebugSaver('selected_on_lines'),
             'global': DebugSaver('selected_on_initial_image')
         }
@@ -24,14 +25,9 @@ class ObjectsSelector(Processor):
                   map(self.process_single_line_, data)
                   for obj in objects_data]
 
-        result.sort(key=lambda obj: (obj.line.height, obj.offset_x))
+        result.sort(key=lambda obj: (obj.line.height, obj.line_order))
         for i, obj in enumerate(result):
             obj.order = i
-
-        for line in data:
-            line.objects.sort(key=lambda obj: obj.order)
-            for i, obj in enumerate(line.objects):
-                obj.line_order = i
 
         raw_data = data[0].raw_data
 
@@ -82,10 +78,15 @@ class ObjectsSelector(Processor):
                 index = find_connected(curr)
             result.append(curr)
 
-        result = [*filter(lambda bbox: bbox.max_x - bbox.min_x >= data.line_spacing, result)]
+        result.sort(key=lambda res: res.min_x)
+        first, *rest = result
 
-        if self.debug_level >= DebugLevel.ALL:
-            print(result)
+        rest = [res
+                for bbox in rest
+                for res in self.separate_connected_(data, bbox)]
+
+        result = [first, *rest]
+        result = [*filter(lambda bbox: bbox.max_x - bbox.min_x >= data.line_spacing, result)]
 
         return [
             SelectedObjectData(
@@ -95,3 +96,6 @@ class ObjectsSelector(Processor):
                 Translation(bbox.offset, parent=data.transformation)
             ) for bbox in result
         ]
+
+    def separate_connected_(self, data: LineData, bbox: BBox) -> list[BBox]:
+        return [bbox]

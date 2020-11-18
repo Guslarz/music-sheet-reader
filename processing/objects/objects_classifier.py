@@ -6,6 +6,8 @@ from utils.data import LineData, SelectedObjectData
 from utils.bbox import BBox
 from config import DebugLevel
 
+from random import randrange
+
 
 class ObjectsClassifier(Processor):
     def __init__(self, *args, **kwargs):
@@ -18,7 +20,7 @@ class ObjectsClassifier(Processor):
             for obj in self.process_single_line_(line)
         ]
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.ALL:
             for obj in result:
                 print(obj)
 
@@ -42,7 +44,9 @@ class ObjectsClassifier(Processor):
 
         order = data.order
 
-        clef_type = Clef.Type.F_CLEF
+        clef_type = Clef.Type.F_CLEF if \
+            data.img.shape[0] < data.line.line_spacing * 5 \
+            else Clef.Type.G_CLEF
 
         return Clef(clef_type, order=order,
                     line_selection=line_selection,
@@ -57,9 +61,15 @@ class ObjectsClassifier(Processor):
 
         order = data.order
 
-        note_type = Note.Type.WHOLE_NOTE
+        types = [
+            Note.Type.WHOLE_NOTE,
+            Note.Type.HALF_NOTE,
+            Note.Type.QUARTER_NOTE,
+            Note.Type.EIGHTH_NOTE
+        ]
+        note_type = types[randrange(len(types))]
 
-        tone = 0
+        tone = randrange(12)
 
         return Note(note_type, tone, order=order,
                     line_selection=line_selection,

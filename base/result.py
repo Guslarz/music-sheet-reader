@@ -4,7 +4,7 @@ from base.musical_object import MusicalObject
 from config import SAVE, OUT_DIR, OUT_EXT
 
 from numpy import array
-from matplotlib.pyplot import imshow, plot, show, savefig
+from matplotlib.pyplot import imshow, show, savefig, clf
 
 
 class Result(object):
@@ -29,11 +29,11 @@ class Result(object):
         imshow(self.img_)
 
         for obj in self.objects_:
-            points = obj.global_selection
-            plot(points[:, 1], points[:, 0])
+            obj.show()
 
         if SAVE:
             filename = f"{OUT_DIR}/output-{self.name_}.{OUT_EXT}"
             savefig(filename)
         else:
             show()
+        clf()

@@ -1,1 +1,1 @@
-resources/sheets/sheet4.jpg
+resources/sheets/easy/easy-sheet1.jpg
