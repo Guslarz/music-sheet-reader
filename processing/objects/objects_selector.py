@@ -85,12 +85,12 @@ class ObjectsSelector(Processor):
         result.sort(key=lambda res: res.min_x)
         first, *rest = result
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.ALL:
             imshow(data.img, cmap="gray")
         rest = [res
                 for bbox in rest
                 for res in self.separate_connected(data, bbox)]
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.ALL:
             self.savers_['vertical'].save(data.name)
 
         result = [first, *rest]
@@ -116,7 +116,7 @@ class ObjectsSelector(Processor):
                                             min_distance=data.line_spacing // 2,
                                             threshold=data.line_spacing * 3)
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.ALL:
             for dist in dists:
                 plot((bbox.min_x + dist, bbox.min_x + dist),
                      (0, data.img.shape[0] - 1),

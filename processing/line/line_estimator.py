@@ -103,7 +103,7 @@ class LineEstimator(Processor):
             (
                 int(round((dist - x * cos(angle)) / sin(angle))),
                 x
-            ) for x in x_vec] for dist, angle in zip(dists, angles)
+            ) for x in x_vec] for dist, angle in sorted(zip(dists, angles), key=lambda x: x[0])
         ])
 
         if self.debug_level >= DebugLevel.ALL:

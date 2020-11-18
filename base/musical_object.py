@@ -118,8 +118,8 @@ class Note(MusicalObject):
     }
 
     TONES = [
-        'C', 'C#', 'D', 'D#', 'E', 'F',
-        'F#', 'G', 'G#', 'A', 'B', 'H'
+        'C', 'D', 'E', 'F',
+        'G', 'A', 'H'
     ]
 
     def __init__(self, note_type: Type, tone: int, *args, **kwargs):
