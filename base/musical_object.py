@@ -46,7 +46,6 @@ class MusicalObject(object):
                 for cls in classes
                 for obj_type in cls.Type]
         labels, colors = zip(*data)
-        print(labels, colors)
 
         lines = [plot((0, 1), (0, 1), color=color)[0]
                  for color in colors]

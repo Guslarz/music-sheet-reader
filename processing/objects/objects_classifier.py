@@ -6,10 +6,8 @@ from utils.data import LineData, SelectedObjectData
 from utils.bbox import BBox
 from config import DebugLevel
 
-from random import randrange
 from numpy import array
 from enum import Enum
-from matplotlib.pyplot import plot
 
 
 class ObjectsClassifier(Processor):

@@ -141,4 +141,20 @@ class ObjectsSelector(Processor):
                 bbox.max_y
             )
             bounding_boxes.append(tmp)
+
+        bounding_boxes = [*filter(lambda x: (x.crop_image(data.img)[:, :] != 0).any(),
+                                  bounding_boxes)]
+
+        for bounding_box in bounding_boxes:
+            img = bounding_box.crop_image(data.img)
+            i = 0
+            while (img[i, :] == 0).all():
+                i += 1
+            bounding_box.min_y += i
+
+            i = -1
+            while (img[i, :] == 0).all():
+                i -= 1
+            bounding_box.max_y += i
+
         return bounding_boxes

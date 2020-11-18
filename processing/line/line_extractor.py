@@ -33,6 +33,8 @@ class LineExtractor(Processor):
         result = []
         for bbox in bounding_boxes:
             cropped = bbox.crop_image(data.img)
+            if any(dim < 20 for dim in cropped.shape):
+                continue
             translation = Translation(bbox.offset,
                                       parent=data.transformation)
             new_data = TransformedImageData(data.raw_data,

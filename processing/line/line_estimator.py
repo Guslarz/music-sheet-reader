@@ -96,7 +96,7 @@ class LineEstimator(Processor):
         h, theta, d = hough_line(image, theta=tested_angles)
         _, angles, dists = hough_line_peaks(h, theta, d,
                                             num_peaks=5,
-                                            min_distance=2)
+                                            min_distance=5)
 
         x_vec = arange(0, image.shape[1])
         staff_lines = array([[

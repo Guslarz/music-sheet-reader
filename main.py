@@ -13,6 +13,9 @@ from base.result import Result
 from base.musical_object import MusicalObject
 from config import DebugLevel
 
+from traceback import print_exception
+from sys import exc_info
+
 
 def main():
     # setup plots style and output dir
@@ -32,17 +35,21 @@ def main():
 
     # process data
     for raw_data in input_reader.get_raw_data():
-        rotated_data = initial_rotator.get_rotated_data(raw_data)
-        sheet_data = sheet_extractor.get_sheet_data(rotated_data)
-        lines_data = line_extractor.get_lines_data(sheet_data)
-        lines_data = line_rotator.get_lines_data(lines_data)
-        lines_data = line_binarizer.get_lines_data(lines_data)
-        lines_data = line_estimator.get_lines_data(lines_data)
-        lines_data = staff_lines_remover.get_lines_data(lines_data)
-        objects_selector.get_objects_data(lines_data)
-        musical_objects = objects_classifier.get_music_objects(lines_data)
-        result = Result(raw_data.name, raw_data.img, musical_objects)
-        result.show()
+        try:
+            rotated_data = initial_rotator.get_rotated_data(raw_data)
+            sheet_data = sheet_extractor.get_sheet_data(rotated_data)
+            lines_data = line_extractor.get_lines_data(sheet_data)
+            lines_data = line_rotator.get_lines_data(lines_data)
+            lines_data = line_binarizer.get_lines_data(lines_data)
+            lines_data = line_estimator.get_lines_data(lines_data)
+            lines_data = staff_lines_remover.get_lines_data(lines_data)
+            objects_selector.get_objects_data(lines_data)
+            musical_objects = objects_classifier.get_music_objects(lines_data)
+            result = Result(raw_data.name, raw_data.img, musical_objects)
+            result.show()
+        except Exception as e:
+            print(f"Error while processing {raw_data.name}")
+            print_exception(*exc_info())
 
     # show legend
     MusicalObject.show_legend()

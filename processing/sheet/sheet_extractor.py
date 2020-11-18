@@ -48,7 +48,9 @@ class SheetExtractor(Processor):
                                     cropped, translation)
 
     def get_edge_(self, data: TransformedImageData) -> array:
-        image = canny(data.img, sigma=2)
+        image = data.img
+        image = image ** 2
+        image = canny(image, sigma=2)
         image = closing(image)
         image = binary_fill_holes(image)
         image = erosion(image)
