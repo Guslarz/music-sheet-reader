@@ -8,7 +8,9 @@ from utils.debug_saver import DebugSaver
 from config import DebugLevel
 
 from skimage.measure import find_contours
+from skimage.transform import hough_line, hough_line_peaks
 from matplotlib.pyplot import imshow, plot, subplots
+from numpy import linspace, pi, array, cos, sin
 
 
 class ObjectsSelector(Processor):
@@ -78,12 +80,18 @@ class ObjectsSelector(Processor):
                 index = find_connected(curr)
             result.append(curr)
 
+        result = [*filter(lambda bbox: bbox.max_x - bbox.min_x >= data.line_spacing, result)]
+
         result.sort(key=lambda res: res.min_x)
         first, *rest = result
 
+        if self.debug_level >= DebugLevel.MAIN:
+            imshow(data.img, cmap="gray")
         rest = [res
                 for bbox in rest
-                for res in self.separate_connected_(data, bbox)]
+                for res in self.separate_connected(data, bbox)]
+        if self.debug_level >= DebugLevel.MAIN:
+            self.savers_['vertical'].save(data.name)
 
         result = [first, *rest]
         result = [*filter(lambda bbox: bbox.max_x - bbox.min_x >= data.line_spacing, result)]
@@ -97,5 +105,40 @@ class ObjectsSelector(Processor):
             ) for bbox in result
         ]
 
-    def separate_connected_(self, data: LineData, bbox: BBox) -> list[BBox]:
-        return [bbox]
+    def separate_connected(self, data: LineData, bbox: BBox) -> list[BBox]:
+        tmp = BBox(bbox.min_x, 0, bbox.max_x, data.img.shape[0] - 1)
+        img = tmp.crop_image(data.img).T
+
+        tested_angles = linspace(pi / 2 - pi / 45,
+                                 pi / 2 + pi / 45, 10)
+        h, theta, d = hough_line(img, theta=tested_angles)
+        _, angles, dists = hough_line_peaks(h, theta, d,
+                                            min_distance=data.line_spacing // 2,
+                                            threshold=data.line_spacing * 3)
+
+        if self.debug_level >= DebugLevel.MAIN:
+            for dist in dists:
+                plot((bbox.min_x + dist, bbox.min_x + dist),
+                     (0, data.img.shape[0] - 1),
+                     'r-')
+
+        if len(dists) <= 1:
+            return [bbox]
+
+        split_lines = [
+            0,
+            *[(dists[i] + dists[i + 1]) / 2
+              for i in range(len(dists) - 1)],
+            bbox.max_x - bbox.min_x + 1
+        ]
+
+        bounding_boxes = []
+        for i in range(len(split_lines) - 1):
+            tmp = BBox(
+                bbox.min_x + split_lines[i],
+                bbox.min_y,
+                bbox.min_x + split_lines[i + 1] - 1,
+                bbox.max_y
+            )
+            bounding_boxes.append(tmp)
+        return bounding_boxes
