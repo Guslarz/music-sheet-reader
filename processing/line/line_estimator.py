@@ -91,12 +91,12 @@ class LineEstimator(Processor):
     def get_line_values_(self, data: TransformedImageData) -> LineEstimatedValues:
         image = data.img
 
-        tested_angles = linspace(pi / 2 - pi / 45,
-                                 pi / 2 + pi / 45, 60)
+        tested_angles = linspace(pi / 2 - pi / 180,
+                                 pi / 2 + pi / 180, 20)
         h, theta, d = hough_line(image, theta=tested_angles)
         _, angles, dists = hough_line_peaks(h, theta, d,
                                             num_peaks=5,
-                                            min_distance=5)
+                                            min_distance=data.img.shape[0] // 15)
 
         x_vec = arange(0, image.shape[1])
         staff_lines = array([[

@@ -117,7 +117,9 @@ class ObjectsClassifier(Processor):
     def get_tone_(self, data: LineData, clef_type: Enum, center: array) -> int:
         if clef_type == Clef.Type.G_CLEF:
             c_height = data.staff_lines[4][0][0] + data.line_spacing
+            octave = 2
         else:
             c_height = data.staff_lines[2][0][0] + data.line_spacing / 2
-        tone = round(2.0 * (c_height - center[0]) / (data.line_spacing + data.line_width / 2) + 7) % 7
+            octave = 1
+        tone = round(2.0 * (c_height - center[0]) / (data.line_spacing + data.line_width / 2) + 7 * octave)
         return tone

@@ -10,6 +10,7 @@ from config import DebugLevel
 from skimage.measure import find_contours
 from skimage.transform import hough_line, hough_line_peaks
 from matplotlib.pyplot import imshow, plot, subplots
+from matplotlib.axes import Axes
 from numpy import linspace, pi
 
 
@@ -23,15 +24,23 @@ class ObjectsSelector(Processor):
         }
 
     def get_objects_data(self, data: list[LineData]) -> list[SelectedObjectData]:
-        result = [obj for objects_data in
-                  map(self.process_single_line_, data)
-                  for obj in objects_data]
+        raw_data = data[0].raw_data
+
+        if self.debug_level >= DebugLevel.REPORT:
+            _, axes = subplots(nrows=len(data))
+        else:
+            axes = [None for _ in data]
+
+        result = [obj
+                  for ax, line in zip(axes, data)
+                  for obj in self.process_single_line_(line, ax)]
+
+        if self.debug_level >= DebugLevel.REPORT:
+            self.savers_['vertical'].save(raw_data.name)
 
         result.sort(key=lambda obj: (obj.line.height, obj.line_order))
         for i, obj in enumerate(result):
             obj.order = i
-
-        raw_data = data[0].raw_data
 
         if self.debug_level >= DebugLevel.REPORT:
             _, axes = subplots(nrows=len(data))
@@ -53,7 +62,7 @@ class ObjectsSelector(Processor):
 
         return result
 
-    def process_single_line_(self, data: LineData) -> list[SelectedObjectData]:
+    def process_single_line_(self, data: LineData, ax: Axes) -> list[SelectedObjectData]:
         margin = 0
         contours = find_contours(data.img, .5)
         bounding_boxes = map(BBox.from_contour, contours)
@@ -85,13 +94,11 @@ class ObjectsSelector(Processor):
         result.sort(key=lambda res: res.min_x)
         first, *rest = result
 
-        if self.debug_level >= DebugLevel.ALL:
-            imshow(data.img, cmap="gray")
+        if self.debug_level >= DebugLevel.REPORT:
+            ax.imshow(data.img, cmap="gray")
         rest = [res
                 for bbox in rest
-                for res in self.separate_connected(data, bbox)]
-        if self.debug_level >= DebugLevel.ALL:
-            self.savers_['vertical'].save(data.name)
+                for res in self.separate_connected(data, bbox, ax)]
 
         result = [first, *rest]
         result = [*filter(lambda bbox: bbox.max_x - bbox.min_x >= data.line_spacing, result)]
@@ -105,7 +112,7 @@ class ObjectsSelector(Processor):
             ) for bbox in result
         ]
 
-    def separate_connected(self, data: LineData, bbox: BBox) -> list[BBox]:
+    def separate_connected(self, data: LineData, bbox: BBox, ax: Axes) -> list[BBox]:
         tmp = BBox(bbox.min_x, 0, bbox.max_x, data.img.shape[0] - 1)
         img = tmp.crop_image(data.img).T
 
@@ -117,11 +124,13 @@ class ObjectsSelector(Processor):
                                             threshold=data.line_spacing * 3)
         dists.sort()
 
-        if self.debug_level >= DebugLevel.ALL:
+        if self.debug_level >= DebugLevel.REPORT:
+            bbox_points = bbox.to_points()
+            ax.plot(bbox_points[:, 0], bbox_points[:, 1], 'b-')
             for dist in dists:
-                plot((bbox.min_x + dist, bbox.min_x + dist),
-                     (0, data.img.shape[0] - 1),
-                     'r-')
+                ax.plot((bbox.min_x + dist, bbox.min_x + dist),
+                        (0, data.img.shape[0] - 1),
+                        'r-')
 
         if len(dists) <= 1:
             return [bbox]

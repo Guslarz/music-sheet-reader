@@ -142,5 +142,12 @@ class Note(MusicalObject):
         super().show()
 
         points = self.global_selection_
-        text(points[3, 1], points[3, 0], Note.TONES[self.tone],
+        tone = self.tone_ % 7
+        octave = self.tone_ // 7
+        label = Note.TONES[tone]
+        if octave > 0:
+            label = label.lower()
+            if octave > 1:
+                label = f"${label}_{octave - 1}$"
+        text(points[3, 1], points[3, 0], label,
              verticalalignment="top")

@@ -28,7 +28,7 @@ class StaffLinesRemover(Processor):
 
     def process_single_line_(self, data: LineData) -> LineData:
         image = data.img.copy()
-        margin = 2
+        margin = data.line_spacing // 3
 
         for staff_line in data.staff_lines:
             for i in range(image.shape[1]):
@@ -37,7 +37,8 @@ class StaffLinesRemover(Processor):
                                  for sign in [-1, 1]
                                  for value in range(data.line_width + margin + 1)]
                 possibilities = [x for x in possibilities
-                                 if image[x, i] == 1]
+                                 if 0 <= x < image.shape[0] and
+                                 image[x, i] == 1]
                 if len(possibilities) == 0:
                     continue
                 height = possibilities[0]
@@ -50,7 +51,7 @@ class StaffLinesRemover(Processor):
                 while j < image.shape[0] and image[j, i]:
                     indices.append(j)
                     j += 1
-                if len(indices) < 3 * data.line_width:
+                if len(indices) <= 2 * data.line_width:
                     image[indices, i] = 0
 
         if self.debug_level >= DebugLevel.ALL:

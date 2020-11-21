@@ -63,7 +63,7 @@ class LineExtractor(Processor):
         image = closing(image)
         image = dilation(image)
         image = binary_fill_holes(image)
-        image = remove_small_objects(image, 500)
+        image = remove_small_objects(image, 1000)
         image = dilation(image)
 
         if self.debug_level >= DebugLevel.ALL:

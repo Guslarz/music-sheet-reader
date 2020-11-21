@@ -1,0 +1,8 @@
+resources/sheets/medium-v2/medium-sheet1.jpg
+resources/sheets/medium-v2/medium-sheet2.jpg
+resources/sheets/medium-v2/medium-sheet3.jpg
+resources/sheets/medium-v2/medium-sheet4.jpg
+resources/sheets/medium-v2/medium-sheet5.jpg
+resources/sheets/medium-v2/medium-sheet6.jpg
+resources/sheets/medium-v2/medium-sheet7.jpg
+resources/sheets/medium-v2/medium-sheet8.jpg
