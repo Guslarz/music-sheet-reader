@@ -6,6 +6,7 @@ from utils.functions import threshold
 from config import DebugLevel
 
 from skimage.color import rgb2gray
+from skimage.feature import canny
 from skimage.filters import sobel, threshold_otsu
 from skimage.morphology import closing
 from skimage.transform import hough_line, hough_line_peaks

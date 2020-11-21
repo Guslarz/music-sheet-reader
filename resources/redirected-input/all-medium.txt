@@ -1,0 +1,6 @@
+resources/sheets/medium/medium-sheet1.jpg
+resources/sheets/medium/medium-sheet2.jpg
+resources/sheets/medium/medium-sheet3.jpg
+resources/sheets/medium/medium-sheet3v2.jpg
+resources/sheets/medium/medium-sheet4.jpg
+resources/sheets/medium/medium-sheet5.jpg

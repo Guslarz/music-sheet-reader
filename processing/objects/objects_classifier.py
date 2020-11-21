@@ -6,8 +6,10 @@ from utils.data import LineData, SelectedObjectData
 from utils.bbox import BBox
 from config import DebugLevel
 
-from numpy import array
+from numpy import array, arange
 from enum import Enum
+from skimage.draw import disk
+from skimage.transform import hough_circle, hough_circle_peaks
 
 
 class ObjectsClassifier(Processor):
@@ -63,16 +65,25 @@ class ObjectsClassifier(Processor):
 
         order = data.order
 
+        hough_radii = arange(data.line.line_spacing // 2,
+                             data.line.line_spacing * 2, 1)
+        hough_res = hough_circle(data.img, hough_radii)
+        _, cx, cy, radius = [*zip(*hough_circle_peaks(hough_res, hough_radii,
+                                                      total_num_peaks=1))][0]
+
+        center = data.line_transformation\
+            .apply_to_points(array([[cy, cx]]))[0]
+        r, c = disk((cy, cx), radius,
+                    shape=data.img.shape)
+        selected = data.img[r, c]
+        white_perc = sum(selected == 1) / len(selected)
+
         note_width = data.img.shape[1]
         note_height = data.img.shape[0]
         if note_height < 2 * data.line.line_spacing:
             note_type = Note.Type.WHOLE_NOTE
-            center = data.line_transformation.apply_to_points([
-                array((note_height, note_width)) / 2
-            ])[0]
         else:
-            blacks = data.img.sum(axis=1)
-            if sum(blacks > data.line.line_spacing) < 3 * data.line.line_width:
+            if white_perc < .7:
                 note_type = Note.Type.HALF_NOTE
             else:
                 if note_width > 2 * data.line.line_spacing:
@@ -80,21 +91,13 @@ class ObjectsClassifier(Processor):
                 else:
                     note_type = Note.Type.QUARTER_NOTE
 
-            y0 = int(data.line.line_spacing / 2)
-            y1 = int(note_height - data.line.line_spacing / 2)
-            if blacks[y0] > blacks[y1]:
-                center = array((y0, note_width / 2))
-            else:
-                center = array((y1, note_width / 2))
-            center = data.line_transformation.apply_to_points([center])[0]
-
-        tone = self.get_tone(data.line, clef_type, center)
+        tone = self.get_tone_(data.line, clef_type, center)
 
         return Note(note_type, tone, order=order,
                     line_selection=line_selection,
                     global_selection=global_selection)
 
-    def get_tone(self, data: LineData, clef_type: Enum, center: array) -> int:
+    def get_tone_(self, data: LineData, clef_type: Enum, center: array) -> int:
         if clef_type == Clef.Type.G_CLEF:
             c_height = data.staff_lines[4][0][0] + data.line_spacing
         else:

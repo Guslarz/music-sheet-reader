@@ -8,7 +8,7 @@ from utils.transformation import Translation
 from config import DebugLevel
 
 from skimage.filters import sobel
-from skimage.morphology import closing, erosion
+from skimage.morphology import closing, erosion, dilation
 from skimage.feature import canny, corner_peaks, corner_harris
 from matplotlib.pyplot import imshow, plot
 from numpy import array
@@ -51,6 +51,7 @@ class SheetExtractor(Processor):
         image = data.img
         image = image ** 2
         image = canny(image, sigma=2)
+        image = dilation(image)
         image = closing(image)
         image = binary_fill_holes(image)
         image = erosion(image)

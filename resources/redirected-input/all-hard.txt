@@ -1,0 +1,8 @@
+resources/sheets/hard/hard-sheet1.jpg
+resources/sheets/hard/hard-sheet2.jpg
+resources/sheets/hard/hard-sheet3.jpg
+resources/sheets/hard/hard-sheet4.jpg
+resources/sheets/hard/hard-sheet5.jpg
+resources/sheets/hard/hard-sheet6.jpg
+resources/sheets/hard/hard-sheet7.jpg
+resources/sheets/hard/hard-sheet8.jpg
