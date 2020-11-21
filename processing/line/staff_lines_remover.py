@@ -28,15 +28,30 @@ class StaffLinesRemover(Processor):
 
     def process_single_line_(self, data: LineData) -> LineData:
         image = data.img.copy()
-        margin = 1
+        margin = 2
 
         for staff_line in data.staff_lines:
             for i in range(image.shape[1]):
-                height = staff_line[i, 0]
-                image[(height - data.line_width - margin):height, i] = \
-                    image[(height - data.line_width - margin - 1), i]
-                image[height:(height + data.line_width + margin + 1), i] = \
-                    image[(height + data.line_width + margin + 1), i]
+                expected_height = staff_line[i, 0]
+                possibilities = [expected_height + sign * value
+                                 for sign in [-1, 1]
+                                 for value in range(data.line_width + margin + 1)]
+                possibilities = [x for x in possibilities
+                                 if image[x, i] == 1]
+                if len(possibilities) == 0:
+                    continue
+                height = possibilities[0]
+                indices = []
+                j = height
+                while j >= 0 and image[j, i]:
+                    indices.append(j)
+                    j -= 1
+                j = height + 1
+                while j < image.shape[0] and image[j, i]:
+                    indices.append(j)
+                    j += 1
+                if len(indices) < 3 * data.line_width:
+                    image[indices, i] = 0
 
         if self.debug_level >= DebugLevel.ALL:
             print("Staff lines erased")
