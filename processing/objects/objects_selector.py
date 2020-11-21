@@ -115,6 +115,7 @@ class ObjectsSelector(Processor):
         _, angles, dists = hough_line_peaks(h, theta, d,
                                             min_distance=data.line_spacing // 2,
                                             threshold=data.line_spacing * 3)
+        dists.sort()
 
         if self.debug_level >= DebugLevel.ALL:
             for dist in dists:
@@ -156,5 +157,15 @@ class ObjectsSelector(Processor):
             while (img[i, :] == 0).all():
                 i -= 1
             bounding_box.max_y += i
+
+            i = 0
+            while (img[:, i] == 0).all():
+                i += 1
+            bounding_box.min_x += i
+
+            i = -1
+            while (img[:, i] == 0).all():
+                i -= 1
+            bounding_box.max_x += i
 
         return bounding_boxes

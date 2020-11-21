@@ -14,6 +14,10 @@ class BBox:
     def min_x(self) -> float:
         return self.min_x_
 
+    @min_x.setter
+    def min_x(self, value):
+        self.min_x_ = value
+
     @property
     def min_y(self) -> float:
         return self.min_y_
@@ -25,6 +29,10 @@ class BBox:
     @property
     def max_x(self) -> float:
         return self.max_x_
+
+    @max_x.setter
+    def max_x(self, value):
+        self.max_x_ = value
 
     @property
     def max_y(self) -> float:
