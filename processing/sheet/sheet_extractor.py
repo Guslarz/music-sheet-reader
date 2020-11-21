@@ -8,7 +8,8 @@ from utils.transformation import Translation
 from config import DebugLevel
 
 from skimage.filters import sobel
-from skimage.morphology import closing, erosion, dilation
+from skimage.morphology import closing, erosion, \
+    dilation, remove_small_objects
 from skimage.feature import canny, corner_peaks, corner_harris
 from matplotlib.pyplot import imshow, plot
 from numpy import array
@@ -30,10 +31,6 @@ class SheetExtractor(Processor):
         bbox = self.get_bbox_(data, edge)
         cropped = bbox.crop_image(data.img)
 
-        if self.debug_level >= DebugLevel.MAIN:
-            imshow(cropped, cmap="gray")
-            self.savers_['cropped'].save(data.name)
-
         translation = Translation(bbox.offset,
                                   parent=data.transformation)
 
@@ -43,6 +40,10 @@ class SheetExtractor(Processor):
             points = translation.apply_to_points(points)
             plot(points[:, 1], points[:, 0])
             self.savers_['on-initial'].save(data.name)
+
+        if self.debug_level >= DebugLevel.REPORT:
+            imshow(cropped, cmap="gray")
+            self.savers_['cropped'].save(data.name)
 
         return TransformedImageData(data.raw_data,
                                     cropped, translation)
@@ -55,6 +56,7 @@ class SheetExtractor(Processor):
         image = closing(image)
         image = binary_fill_holes(image)
         image = erosion(image)
+        image = remove_small_objects(image, 5000)
         image = sobel(image)
 
         if self.debug_level >= DebugLevel.ALL:
@@ -73,8 +75,8 @@ class SheetExtractor(Processor):
         min_x, max_x = x_values[1:3]
         min_y, max_y = y_values[1:3]
 
-        if self.debug_level >= DebugLevel.ALL:
-            imshow(data.img, cmap="gray")
+        if self.debug_level >= DebugLevel.REPORT:
+            imshow(image, cmap="gray")
             plot(coords[:, 1], coords[:, 0], '+r',
                  markersize=15)
             self.savers_['corners'].save(data.name)

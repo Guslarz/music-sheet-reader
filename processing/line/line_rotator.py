@@ -30,7 +30,7 @@ class LineRotator(Processor):
         result = [*map(self.process_single_line_, data)]
         raw_data = data[0].raw_data
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.REPORT:
             _, axes = subplots(nrows=len(result))
             for ax, res in zip(axes, result):
                 ax.imshow(res.img, cmap="gray")

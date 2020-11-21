@@ -6,7 +6,6 @@ from utils.functions import threshold
 from config import DebugLevel
 
 from skimage.color import rgb2gray
-from skimage.feature import canny
 from skimage.filters import sobel, threshold_otsu
 from skimage.morphology import closing
 from skimage.transform import hough_line, hough_line_peaks
@@ -37,7 +36,7 @@ class InitialRotator(Processor):
         rotation = Rotation(rotation_angle,
                             Rotation.center_from_img(gray))
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.REPORT:
             imshow(rotated, cmap="gray")
             self.savers_['result'].save(raw_data.name)
 
@@ -75,8 +74,8 @@ class InitialRotator(Processor):
                              threshold=.8 * amax(h),
                              min_distance=2)
 
-        if self.debug_level >= DebugLevel.ALL:
-            imshow(raw_data.img)
+        if self.debug_level >= DebugLevel.REPORT:
+            imshow(img, cmap="gray")
             origin = array((0, img.shape[1] - 1))
             for angle, dist in zip(angles, dists):
                 y0, y1 = (dist - origin * cos(angle)) / \

@@ -4,42 +4,55 @@ from base.processor import Processor
 from base.musical_object import Clef, Note, MusicalObject
 from utils.data import LineData, SelectedObjectData
 from utils.bbox import BBox
+from utils.debug_saver import DebugSaver
 from config import DebugLevel
 
-from numpy import array, arange
-from enum import Enum
 from skimage.draw import disk
 from skimage.transform import hough_circle, hough_circle_peaks
+from numpy import array, arange
+from enum import Enum
+from matplotlib.pyplot import subplots
+from matplotlib.axes import Axes
 
 
 class ObjectsClassifier(Processor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.savers_ = {
+            'centers': DebugSaver('classifier-centers')
+        }
 
     def get_music_objects(self, data: list[LineData]) -> list[MusicalObject]:
+        if self.debug_level >= DebugLevel.REPORT:
+            _, axes = subplots(nrows=len(data))
+        else:
+            axes = [None for _ in data]
+
         result = [
             obj
-            for line in data
-            for obj in self.process_single_line_(line)
+            for ax, line in zip(axes, data)
+            for obj in self.process_single_line_(line, ax)
         ]
 
-        if self.debug_level >= DebugLevel.ALL:
-            for obj in result:
-                print(obj)
+        if self.debug_level >= DebugLevel.REPORT:
+            self.savers_['centers'].save(data[0].name)
 
         return result
 
-    def process_single_line_(self, data: LineData) -> list[MusicalObject]:
+    def process_single_line_(self, data: LineData, ax: Axes) -> list[MusicalObject]:
+        if self.debug_level >= DebugLevel.REPORT:
+            ax.imshow(data.img, cmap="gray")
+
         first, *rest = data.objects
-        clef = self.classify_clef(first)
+        clef = self.classify_clef_(first)
         result = [
             clef,
-            *[self.classify_note(note, clef.type) for note in rest]
+            *[self.classify_note_(note, clef.type, ax) for note in rest]
         ]
 
         return result
 
-    def classify_clef(self, data: SelectedObjectData) -> Clef:
+    def classify_clef_(self, data: SelectedObjectData) -> Clef:
         selection = BBox.from_image(data.img).to_points()
         line_selection = data.line_transformation\
             .apply_to_points(selection)
@@ -56,7 +69,7 @@ class ObjectsClassifier(Processor):
                     line_selection=line_selection,
                     global_selection=global_selection)
 
-    def classify_note(self, data: SelectedObjectData, clef_type: Enum) -> Note:
+    def classify_note_(self, data: SelectedObjectData, clef_type: Enum, ax: Axes) -> Note:
         selection = BBox.from_image(data.img).to_points()
         line_selection = data.line_transformation\
             .apply_to_points(selection)
@@ -73,6 +86,10 @@ class ObjectsClassifier(Processor):
 
         center = data.line_transformation\
             .apply_to_points(array([[cy, cx]]))[0]
+
+        if self.debug_level >= DebugLevel.REPORT:
+            ax.plot(center[1], center[0], 'ro')
+
         r, c = disk((cy, cx), radius,
                     shape=data.img.shape)
         selected = data.img[r, c]

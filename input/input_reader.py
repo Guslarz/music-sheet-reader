@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from base.processor import Processor
-from input.images_generator import ImagesGenerator
+from utils.images_generator import ImagesGenerator
 from utils.data import RawData
 from utils.debug_saver import DebugSaver
 from config import DebugLevel
@@ -14,12 +14,14 @@ from collections.abc import Iterable
 class InputReader(Processor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.initial_image_saver_ = DebugSaver('initial-image')
+        self.savers_ = {
+            'initial': DebugSaver('initial-image')
+        }
 
     def get_raw_data(self) -> Iterable[RawData]:
         for data in ImagesGenerator(stdin):
-            if self.debug_level >= DebugLevel.MAIN:
+            if self.debug_level >= DebugLevel.REPORT:
                 plt.imshow(data.img)
-                self.initial_image_saver_.save(data.name)
+                self.savers_['initial'].save(data.name)
 
             yield data

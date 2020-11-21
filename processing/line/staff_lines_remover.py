@@ -18,7 +18,7 @@ class StaffLinesRemover(Processor):
     def get_lines_data(self, data: list[LineData]) -> list[LineData]:
         result = [*map(self.process_single_line_, data)]
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.REPORT:
             _, axes = subplots(nrows=len(result))
             for ax, res in zip(axes, result):
                 ax.imshow(res.img, cmap="gray")

@@ -75,8 +75,8 @@ class LineExtractor(Processor):
     def get_line_bounding_boxes_(self, data: TransformedImageData, image: array) -> list[BBox]:
         contours = find_contours(image, .5)
 
-        if self.debug_level >= DebugLevel.ALL:
-            imshow(data.img, cmap="gray")
+        if self.debug_level >= DebugLevel.REPORT:
+            imshow(image, cmap="gray")
             for contour in contours:
                 plot(contour[:, 1], contour[:, 0])
             self.savers_['contours'].save(data.name)

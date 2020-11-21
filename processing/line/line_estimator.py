@@ -25,7 +25,7 @@ class LineEstimator(Processor):
         common = self.get_common_values_(data)
         lines_values = [*map(self.get_line_values_, data)]
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.REPORT:
             _, axes = subplots(nrows=len(data))
             for ax, image_data, values in zip(axes, data, lines_values):
                 ax.imshow(image_data.img, cmap="gray")

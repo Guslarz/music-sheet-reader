@@ -10,7 +10,7 @@ from config import DebugLevel
 from skimage.measure import find_contours
 from skimage.transform import hough_line, hough_line_peaks
 from matplotlib.pyplot import imshow, plot, subplots
-from numpy import linspace, pi, array, cos, sin
+from numpy import linspace, pi
 
 
 class ObjectsSelector(Processor):
@@ -33,7 +33,7 @@ class ObjectsSelector(Processor):
 
         raw_data = data[0].raw_data
 
-        if self.debug_level >= DebugLevel.MAIN:
+        if self.debug_level >= DebugLevel.REPORT:
             _, axes = subplots(nrows=len(data))
             for ax, line in zip(axes, data):
                 ax.imshow(line.img, cmap="gray")
