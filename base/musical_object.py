@@ -1,7 +1,7 @@
 from config import SAVE, OUT_DIR, OUT_EXT
 
 from enum import Enum
-from numpy import array
+from numpy import array, mean
 from matplotlib.pyplot import plot, text, \
     clf, savefig, show, figure
 
@@ -36,8 +36,11 @@ class MusicalObject(object):
         plot(points[:, 1], points[:, 0],
              color=self.__class__.COLORS[self.type])
 
-        text(points[0, 1], points[0, 0],
-             f"{self.order_}")
+        order_pos = mean(points[:2, :], axis=0)
+        text(order_pos[1], order_pos[0],
+             f"{self.order_}",
+             verticalalignment="bottom",
+             horizontalalignment="center")
 
     @staticmethod
     def show_legend():
@@ -141,7 +144,8 @@ class Note(MusicalObject):
     def show(self):
         super().show()
 
-        points = self.global_selection_
+        label_pos = mean(self.global_selection_[2:, :],
+                         axis=0)
         tone = self.tone_ % 7
         octave = self.tone_ // 7
         label = Note.TONES[tone]
@@ -149,5 +153,6 @@ class Note(MusicalObject):
             label = label.lower()
             if octave > 1:
                 label = f"${label}_{octave - 1}$"
-        text(points[3, 1], points[3, 0], label,
-             verticalalignment="top")
+        text(label_pos[1], label_pos[0], label,
+             verticalalignment="top",
+             horizontalalignment="center")

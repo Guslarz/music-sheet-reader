@@ -1,0 +1,12 @@
+resources/sheets/hard-v2/hard-sheet1.jpg
+resources/sheets/hard-v2/hard-sheet2.jpg
+resources/sheets/hard-v2/hard-sheet3.jpg
+resources/sheets/hard-v2/hard-sheet4.jpg
+resources/sheets/hard-v2/hard-sheet5.jpg
+resources/sheets/hard-v2/hard-sheet6.jpg
+resources/sheets/hard-v2/hard-sheet7.jpg
+resources/sheets/hard-v2/hard-sheet8.jpg
+resources/sheets/hard-v2/hard-sheet9.jpg
+resources/sheets/hard-v2/hard-sheet10.jpg
+resources/sheets/hard-v2/hard-sheet11.jpg
+resources/sheets/hard-v2/hard-sheet12.jpg

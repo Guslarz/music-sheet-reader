@@ -96,6 +96,9 @@ class ObjectsSelector(Processor):
 
         if self.debug_level >= DebugLevel.REPORT:
             ax.imshow(data.img, cmap="gray")
+            points = first.to_points()
+            ax.plot(points[:, 0], points[:, 1], 'g-')
+
         rest = [res
                 for bbox in rest
                 for res in self.separate_connected(data, bbox, ax)]

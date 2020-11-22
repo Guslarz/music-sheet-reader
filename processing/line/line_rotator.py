@@ -79,8 +79,8 @@ class LineRotator(Processor):
         return image
 
     def get_angles_(self, data: TransformedImageData, img: array) -> array:
-        tested_angles = linspace(pi / 2 - pi / 45,
-                                 pi / 2 + pi / 45, 60)
+        tested_angles = linspace(pi / 2 - pi / 10,
+                                 pi / 2 + pi / 10, 60)
         h, theta, d = hough_line(img, theta=tested_angles)
         _, angles, dists = hough_line_peaks(h, theta, d,
                                             num_peaks=5,

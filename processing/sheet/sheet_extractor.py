@@ -9,7 +9,7 @@ from config import DebugLevel
 
 from skimage.filters import sobel
 from skimage.morphology import closing, erosion, \
-    dilation, remove_small_objects
+    dilation, remove_small_objects, disk
 from skimage.feature import canny, corner_peaks, corner_harris
 from matplotlib.pyplot import imshow, plot
 from numpy import array
@@ -55,7 +55,7 @@ class SheetExtractor(Processor):
         image = dilation(image)
         image = closing(image)
         image = binary_fill_holes(image)
-        image = erosion(image)
+        image = erosion(image, disk(3))
         image = remove_small_objects(image, 5000)
         image = sobel(image)
 
