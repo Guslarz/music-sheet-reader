@@ -22,16 +22,16 @@ def main():
     DebugSaver.setup()
 
     # processors
-    input_reader = InputReader(debug_level=DebugLevel.OFF)
-    initial_rotator = InitialRotator(debug_level=DebugLevel.OFF)
-    sheet_extractor = SheetExtractor(debug_level=DebugLevel.OFF)
-    line_extractor = LineExtractor(debug_level=DebugLevel.OFF)
-    line_rotator = LineRotator(debug_level=DebugLevel.OFF)
-    line_binarizer = LineBinarizer(debug_level=DebugLevel.OFF)
-    line_estimator = LineEstimator(debug_level=DebugLevel.OFF)
-    staff_lines_remover = StaffLinesRemover(debug_level=DebugLevel.OFF)
-    objects_selector = ObjectsSelector(debug_level=DebugLevel.OFF)
-    objects_classifier = ObjectsClassifier(debug_level=DebugLevel.OFF)
+    input_reader = InputReader()
+    initial_rotator = InitialRotator()
+    sheet_extractor = SheetExtractor()
+    line_extractor = LineExtractor()
+    line_rotator = LineRotator()
+    line_binarizer = LineBinarizer()
+    line_estimator = LineEstimator()
+    staff_lines_remover = StaffLinesRemover()
+    objects_selector = ObjectsSelector()
+    objects_classifier = ObjectsClassifier()
 
     # process data
     for raw_data in input_reader.get_raw_data():
@@ -47,7 +47,7 @@ def main():
             musical_objects = objects_classifier.get_music_objects(lines_data)
             result = Result(raw_data.name, raw_data.img, musical_objects)
             result.show()
-        except Exception as e:
+        except:
             print(f"Error while processing {raw_data.name}")
             if TRACEBACK:
                 print_exception(*exc_info())

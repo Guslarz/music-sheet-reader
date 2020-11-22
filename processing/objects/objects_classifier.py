@@ -103,10 +103,19 @@ class ObjectsClassifier(Processor):
             if white_perc < .7:
                 note_type = Note.Type.HALF_NOTE
             else:
-                if note_width > 2 * data.line.line_spacing:
-                    note_type = Note.Type.EIGHTH_NOTE
-                else:
+                half_height = note_height // 2
+                half = data.img[:half_height, :] if cy >= half_height else data.img[half_height:, :]
+                if not (half == 1).any():
                     note_type = Note.Type.QUARTER_NOTE
+                else:
+                    left = 0
+                    while not (half[:, left]).any():
+                        left += 1
+                    right = half.shape[1] - 1
+                    while not (half[:, right]).any():
+                        right -= 1
+                    width = right - left + 1
+                    note_type = Note.Type.EIGHTH_NOTE if width > 3 * data.line.line_width else Note.Type.QUARTER_NOTE
 
         tone = self.get_tone_(data.line, clef_type, center)
 

@@ -110,7 +110,7 @@ class Note(MusicalObject):
     COLORS = {
         Type.WHOLE_NOTE: 'blue',
         Type.HALF_NOTE: 'green',
-        Type.QUARTER_NOTE: 'yellow',
+        Type.QUARTER_NOTE: 'gold',
         Type.EIGHTH_NOTE: 'red'
     }
 
