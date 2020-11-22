@@ -144,7 +144,7 @@ class Note(MusicalObject):
     def show(self):
         super().show()
 
-        label_pos = mean(self.global_selection_[2:, :],
+        label_pos = mean(self.global_selection_[2:4, :],
                          axis=0)
         tone = self.tone_ % 7
         octave = self.tone_ // 7

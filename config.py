@@ -15,7 +15,7 @@ OUT_EXT = 'jpg'
 
 
 # CONFIG VARS
-GLOBAL_DEBUG_LEVEL = DebugLevel.REPORT
+GLOBAL_DEBUG_LEVEL = DebugLevel.OFF
 SAVE = False
 
 
