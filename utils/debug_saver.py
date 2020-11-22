@@ -32,13 +32,13 @@ class DebugSaver(object):
 
     @staticmethod
     def setup():
-        if SAVE:
-            rc('xtick', bottom=False, labelbottom=False)
-            rc('ytick', left=False, labelleft=False)
-            rc('figure.subplot', wspace=0, left=0, right=1,
-               hspace=0, top=1, bottom=0)
-            rc('font', size=7)
+        rc('xtick', bottom=False, labelbottom=False)
+        rc('ytick', left=False, labelleft=False)
+        rc('figure.subplot', wspace=0, left=0, right=1,
+           hspace=0, top=1, bottom=0)
+        rc('font', size=6)
 
+        if SAVE:
             folder = OUT_DIR
             if not path.isdir(folder):
                 mkdir(folder)

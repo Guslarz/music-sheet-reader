@@ -1,4 +1,5 @@
-from config import SAVE, OUT_DIR, OUT_EXT
+from config import SAVE, OUT_DIR, OUT_EXT, \
+    LABEL_BBOX
 
 from enum import Enum
 from numpy import array, mean
@@ -40,7 +41,8 @@ class MusicalObject(object):
         text(order_pos[1], order_pos[0],
              f"{self.order_}",
              verticalalignment="bottom",
-             horizontalalignment="center")
+             horizontalalignment="center",
+             bbox=LABEL_BBOX)
 
     @staticmethod
     def show_legend():
@@ -155,4 +157,5 @@ class Note(MusicalObject):
                 label = f"${label}_{octave - 1}$"
         text(label_pos[1], label_pos[0], label,
              verticalalignment="top",
-             horizontalalignment="center")
+             horizontalalignment="center",
+             bbox=LABEL_BBOX)
