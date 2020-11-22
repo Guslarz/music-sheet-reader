@@ -12,11 +12,11 @@ class DebugLevel(IntEnum):
 # CONSTANTS
 OUT_DIR = 'resources/output'
 OUT_EXT = 'jpg'
-LABEL_BG_COLOR = 'white'
 LABEL_BBOX = dict(alpha=.5, color="white",
                   boxstyle="square,pad=0")
 
 
 # CONFIG VARS
-GLOBAL_DEBUG_LEVEL = DebugLevel.OFF
-SAVE = True
+GLOBAL_DEBUG_LEVEL = DebugLevel.ALL
+SAVE = False
+TRACEBACK = False

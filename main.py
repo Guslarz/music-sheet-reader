@@ -11,7 +11,7 @@ from processing.objects.objects_selector import ObjectsSelector
 from processing.objects.objects_classifier import ObjectsClassifier
 from base.result import Result
 from base.musical_object import MusicalObject
-from config import DebugLevel
+from config import DebugLevel, TRACEBACK
 
 from traceback import print_exception
 from sys import exc_info
@@ -49,7 +49,8 @@ def main():
             result.show()
         except Exception as e:
             print(f"Error while processing {raw_data.name}")
-            print_exception(*exc_info())
+            if TRACEBACK:
+                print_exception(*exc_info())
 
     # show legend
     MusicalObject.show_legend()

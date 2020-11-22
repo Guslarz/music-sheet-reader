@@ -32,13 +32,12 @@ class DebugSaver(object):
 
     @staticmethod
     def setup():
-        rc('xtick', bottom=False, labelbottom=False)
-        rc('ytick', left=False, labelleft=False)
-        rc('figure.subplot', wspace=0, left=0, right=1,
-           hspace=0, top=1, bottom=0)
-        rc('font', size=6)
-
         if SAVE:
+            rc('xtick', bottom=False, labelbottom=False)
+            rc('ytick', left=False, labelleft=False)
+            rc('figure.subplot', wspace=0, left=0, right=1,
+               hspace=0, top=1, bottom=0)
+            rc('font', size=6)
             folder = OUT_DIR
             if not path.isdir(folder):
                 mkdir(folder)
@@ -49,4 +48,7 @@ class DebugSaver(object):
                     remove(file_path)
                 except Exception as e:
                     print('Failed to delete %s. Reason: %s' % (file_path, e))
-        # else:
+        else:
+            rc('figure.subplot', wspace=0, left=0, right=1,
+               hspace=0, top=1, bottom=0)
+            rc('font', size=6)
