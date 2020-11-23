@@ -48,11 +48,11 @@ class BBox:
 
     def to_points(self) -> array:
         return array([
-            [self.min_x_, self.min_y_],
-            [self.min_x_, self.max_y_],
-            [self.max_x_, self.max_y_],
-            [self.max_x_, self.min_y_],
-            [self.min_x_, self.min_y_]
+            [self.min_y_, self.min_x_],
+            [self.min_y_, self.max_x_],
+            [self.max_y_, self.max_x_],
+            [self.max_y_, self.min_x_],
+            [self.min_y_, self.min_x_]
         ])
 
     def crop_image(self, image: array) -> array:
@@ -71,7 +71,7 @@ class BBox:
 
     @staticmethod
     def from_image(image: array) -> BBox:
-        return BBox(0, 0, *image.shape)
+        return BBox(0, 0, *image.shape[::-1])
 
     @staticmethod
     def merge(a: BBox, b: BBox) -> BBox:

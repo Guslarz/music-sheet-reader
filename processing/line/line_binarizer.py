@@ -34,6 +34,9 @@ class LineBinarizer(Processor):
         image = data.img ** 2
         image = 1 - image
         image = contrast(image, 30, 0)
+        window_size = image.shape[0]
+        if window_size % 2 == 0:
+            window_size -= 1
         image = threshold(image, threshold_otsu(image))
 
         if self.debug_level >= DebugLevel.ALL:

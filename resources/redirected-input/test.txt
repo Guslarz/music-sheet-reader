@@ -1,1 +1,3 @@
-resources/sheets/easy-v2/easy-sheet2.jpg
+resources/sheets/hard/hard-sheet9.jpg
+resources/sheets/hard/hard-sheet10.jpg
+resources/sheets/hard/hard-sheet12.jpg

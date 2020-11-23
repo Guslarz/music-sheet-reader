@@ -97,7 +97,7 @@ class ObjectsSelector(Processor):
         if self.debug_level >= DebugLevel.REPORT:
             ax.imshow(data.img, cmap="gray")
             points = first.to_points()
-            ax.plot(points[:, 0], points[:, 1], 'g-')
+            ax.plot(points[:, 1], points[:, 0], 'g-')
 
         rest = [res
                 for bbox in rest
@@ -129,7 +129,7 @@ class ObjectsSelector(Processor):
 
         if self.debug_level >= DebugLevel.REPORT:
             bbox_points = bbox.to_points()
-            ax.plot(bbox_points[:, 0], bbox_points[:, 1], 'b-')
+            ax.plot(bbox_points[:, 1], bbox_points[:, 0], 'b-')
             for dist in dists:
                 ax.plot((bbox.min_x + dist, bbox.min_x + dist),
                         (0, data.img.shape[0] - 1),

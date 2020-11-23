@@ -93,9 +93,11 @@ class ObjectsClassifier(Processor):
         r, c = disk((cy, cx), radius,
                     shape=data.img.shape)
         selected = data.img[r, c]
-        white_perc = sum(selected == 1) / len(selected)
+        if len(selected) == 0:
+            white_perc = 0
+        else:
+            white_perc = sum(selected == 1) / len(selected)
 
-        note_width = data.img.shape[1]
         note_height = data.img.shape[0]
         if note_height < 2 * data.line.line_spacing:
             note_type = Note.Type.WHOLE_NOTE

@@ -11,7 +11,8 @@ from skimage.filters import sobel
 from skimage.morphology import closing, erosion, \
     dilation, remove_small_objects, disk
 from skimage.feature import canny, corner_peaks, corner_harris
-from matplotlib.pyplot import imshow, plot
+from skimage.measure import find_contours
+from matplotlib.pyplot import imshow, plot, show
 from numpy import array
 from scipy.ndimage import binary_fill_holes
 
@@ -56,8 +57,7 @@ class SheetExtractor(Processor):
         image = closing(image)
         image = binary_fill_holes(image)
         image = erosion(image, disk(3))
-        image = remove_small_objects(image, 5000)
-        image = sobel(image)
+        image = remove_small_objects(image, 7500)
 
         if self.debug_level >= DebugLevel.ALL:
             imshow(image, cmap="gray")
@@ -67,6 +67,12 @@ class SheetExtractor(Processor):
 
     def get_bbox_(self, data: TransformedImageData,
                   image: array) -> BBox:
+        contours = find_contours(image, .5)
+        if len(contours) != 1:
+            return BBox.from_image(image)
+
+        image = sobel(image)
+
         coords = corner_peaks(corner_harris(image),
                               threshold_rel=0,
                               num_peaks=4)
