@@ -1,6 +1,11 @@
 resources/sheets/medium/medium-sheet1.jpg
 resources/sheets/medium/medium-sheet2.jpg
 resources/sheets/medium/medium-sheet3.jpg
-resources/sheets/medium/medium-sheet3v2.jpg
 resources/sheets/medium/medium-sheet4.jpg
 resources/sheets/medium/medium-sheet5.jpg
+resources/sheets/medium/medium-sheet6.jpg
+resources/sheets/medium/medium-sheet7.jpg
+resources/sheets/medium/medium-sheet8.jpg
+resources/sheets/medium/medium-sheet9.jpg
+resources/sheets/medium/medium-sheet10.jpg
+resources/sheets/medium/medium-sheet11.jpg

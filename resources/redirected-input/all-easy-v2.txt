@@ -1,6 +1,0 @@
-resources/sheets/easy-v2/easy-sheet1.jpg
-resources/sheets/easy-v2/easy-sheet2.jpg
-resources/sheets/easy-v2/easy-sheet3.jpg
-resources/sheets/easy-v2/easy-sheet4.jpg
-resources/sheets/easy-v2/easy-sheet5.jpg
-resources/sheets/easy-v2/easy-sheet6.jpg

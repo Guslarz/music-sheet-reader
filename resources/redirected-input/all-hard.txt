@@ -6,3 +6,9 @@ resources/sheets/hard/hard-sheet5.jpg
 resources/sheets/hard/hard-sheet6.jpg
 resources/sheets/hard/hard-sheet7.jpg
 resources/sheets/hard/hard-sheet8.jpg
+resources/sheets/hard/hard-sheet9.jpg
+resources/sheets/hard/hard-sheet10.jpg
+resources/sheets/hard/hard-sheet11.jpg
+resources/sheets/hard/hard-sheet12.jpg
+resources/sheets/hard/hard-sheet13.jpg
+resources/sheets/hard/hard-sheet14.jpg
