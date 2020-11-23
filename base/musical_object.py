@@ -154,7 +154,7 @@ class Note(MusicalObject):
         if octave > 0:
             label = label.lower()
             if octave > 1:
-                label = f"${label}_{octave - 1}$"
+                label = f"${label}^{octave - 1}$"
         text(label_pos[1], label_pos[0], label,
              verticalalignment="top",
              horizontalalignment="center",

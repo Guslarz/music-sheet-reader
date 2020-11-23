@@ -22,7 +22,7 @@ def main():
     DebugSaver.setup()
 
     # processors
-    input_reader = InputReader()
+    input_reader = InputReader(debug_level=DebugLevel.REPORT)
     initial_rotator = InitialRotator()
     sheet_extractor = SheetExtractor()
     line_extractor = LineExtractor()

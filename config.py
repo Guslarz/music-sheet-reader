@@ -17,6 +17,6 @@ LABEL_BBOX = dict(alpha=.5, color="white",
 
 
 # CONFIG VARS
-GLOBAL_DEBUG_LEVEL = DebugLevel.MAIN
+GLOBAL_DEBUG_LEVEL = DebugLevel.OFF
 SAVE = False
 TRACEBACK = True
