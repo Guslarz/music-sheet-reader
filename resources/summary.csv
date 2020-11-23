@@ -1,0 +1,5 @@
+category,type,tone,detected,detected_type,detected_tone
+easy,G_CLEF,,true,G_CLEF,
+easy,HALF,20,true,HALF,20
+easy,HALF,18,true,HALF,18
+easy,EIGHTH,18,true,EIGHTH,18
